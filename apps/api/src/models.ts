@@ -16,7 +16,7 @@ export interface ILead {
     email?: string; // Optional field
     phone?: string; // Optional field
     status: 'new' | 'contacted' | 'qualified' | 'converted' | 'archived';
-    assignedTo?: string; // References the User ObjectId
+    userId?: string; // References the User ObjectId
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -28,7 +28,7 @@ export interface ICustomer {
     phone: string;
     address?: string; // Optional field
     createdFromLead?: string; // References the Lead ObjectId
-    managedBy?: string; // References the User ObjectId
+    userId?: string; // References the User ObjectId
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -72,7 +72,7 @@ const leadSchema = new mongoose.Schema<ILead>({
         enum: ['new', 'contacted', 'qualified', 'converted', 'archived'],
         default: 'new',
     },
-    assignedTo: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
@@ -87,7 +87,6 @@ const customerSchema = new mongoose.Schema<ICustomer>({
     },
     email: {
         type: String,
-        unique: true,
     },
     phone: {
         type: String,
@@ -100,9 +99,10 @@ const customerSchema = new mongoose.Schema<ICustomer>({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Lead',
     },
-    managedBy: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
     },
 }, { timestamps: true });
 
