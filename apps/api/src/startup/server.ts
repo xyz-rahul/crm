@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import userRoutes from '../routes/userRoutes'
+import errorHandler from "../errorHandler";
 
 
 export default function createServer(): express.Express {
@@ -12,6 +14,8 @@ export default function createServer(): express.Express {
         .get('/status', (_, res) => {
             res.json({ status: 'OK' });
         })
+        .use('/user', userRoutes)
+        .use(errorHandler)
 
     return app;
 };

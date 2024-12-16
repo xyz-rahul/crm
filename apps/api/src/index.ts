@@ -1,3 +1,4 @@
+import 'express-async-errors'; // should be imported before express is called
 import createServer from './startup/server';
 import mongoConnection from './startup/db';
 
