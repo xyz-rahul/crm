@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { User, Lead, Customer } from '../models';
+import { User } from '../models';
 import bcrypt from 'bcrypt';
 
+const secret = 'secret';
 export const AuthController = {
     async signUpAsManager(req: Request, res: Response) {
         const { name, email, password } = req.body;
@@ -9,8 +10,8 @@ export const AuthController = {
             res.status(400).json({ message: 'Name, email, and password are required.' });
         }
 
-        const user = await User.findOne({ "email": { "$exists": true } })
-        if (!user) res.status(400).json({ message: "user with name already exists" });
+        const user = await User.findOne({ "email": email })
+        if (user) res.status(400).json({ message: "user with name already exists" });
 
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -25,23 +26,41 @@ export const AuthController = {
     },
 
     async login(req: Request, res: Response) {
-        console.log(req.session.user)
         const { email, password } = req.body;
+        console.log(email, password);
         const user = await User.findOne({
-            "email": { "email": { "$eq": email } },
-            "password": { "password": { "$eq": password } }
+            "email": email,
         })
 
-        //TODO
-        req.session.user = {
-            email: user?.email!,
-            role: user?.role!
+        if (
+            !user ||
+            ! await bcrypt.compare(password, user.password)
+        ) {
+            res.status(404).json({ message: "Wrong credential" });
+        } else {
+            const compare = await bcrypt.compare(password, user.password);
+            if (!compare) {
+                res.status(404).json({ message: "Wrong credential" });
+            }
+
+            req.session.user = {
+                email: user.email,
+                role: user.role
+            }
+
+            console.log(req.session);
+            res.json({ message: 'ok' });
         }
+    },
 
-        res.json({ message: 'ok' });
+    async logout(req: Request, res: Response) {
 
-    }
+        res.header('Cache-Control', 'no-cache')
+        req.session.destroy(function(err) {
+            console.log('session destory error: ', err)
+        });
+        res.send();
+    },
 };
-
 
 

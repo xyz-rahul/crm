@@ -31,7 +31,6 @@ export default function createServer(): express.Express {
             cookie: { maxAge: 24 * 60 * 60 * 1000 },
             store: MongoStore.create({
                 client: mongoose.connection.getClient(),
-                // dbName: process.env.MONGO_DB_NAME,
                 dbName: 'myapp',
                 collectionName: "sessions",
                 stringify: false,

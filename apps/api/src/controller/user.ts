@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { User, Lead, Customer } from '../models';
+import { User } from '../models';
 
 export const UserController = {
     async createAgent(req: Request, res: Response) {
@@ -10,16 +10,6 @@ export const UserController = {
         const savedUser = await user.save();
         res.status(201).json(savedUser);
     },
-    // async createManager(req: Request, res: Response) {
-    //     const user = new User(req.body);
-    //     const savedUser = await user.save();
-    //     res.status(201).json(savedUser);
-    // },
-    // async createUser(req: Request, res: Response) {
-    //     const user = new User(req.body);
-    //     const savedUser = await user.save();
-    //     res.status(201).json(savedUser);
-    // },
 
     async getAllUsers(req: Request, res: Response) {
         const users = await User.find();

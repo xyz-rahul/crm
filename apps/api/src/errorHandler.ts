@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import mongodb = require('mongodb');
 import { ErrorRequestHandler, Request, Response, NextFunction } from 'express'
+import { JsonWebTokenError } from 'jsonwebtoken';
 
 export default function(error: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) {
     if (error instanceof mongodb.MongoServerError) {
@@ -37,6 +38,10 @@ export default function(error: ErrorRequestHandler, req: Request, res: Response,
         console.log('Generic Mongoose Error');
         res.status(500).json({ name: error.name, message: error.message });
     }
+    if (error instanceof JsonWebTokenError) {
+        res.status(400).json({ name: error.name, message: error.message });
+    }
+
 
     console.error('Unhandled error:', error);
     res.status(500).json();
