@@ -1,12 +1,15 @@
 {
-  "name": "crm",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-      "dev": "pnpm --filter api run dev"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+    "name": "crm",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "concurrently \"pnpm --filter api run dev\" \"pnpm --filter web run dev\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "concurrently": "^9.1.0"
+    }
 }
