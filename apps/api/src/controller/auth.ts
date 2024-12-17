@@ -49,7 +49,7 @@ export const AuthController = {
             }
 
             console.log(req.session);
-            res.json({ message: 'ok' });
+            res.json(user);
         }
     },
 

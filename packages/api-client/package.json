@@ -1,0 +1,13 @@
+{
+  "name": "@myorg/api-client",
+  "version": "1.0.0",
+  "description": "Holds function to make call to api service",
+  "license": "ISC",
+  "dependencies": {
+    "@myorg/types": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.4",
+    "axios": "^1.7.9"
+  }
+}
