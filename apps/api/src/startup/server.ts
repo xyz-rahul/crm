@@ -41,7 +41,7 @@ export default function createServer(): express.Express {
         .get('/status', (req, res) => {
             res.json({ status: 'OK' });
         })
-        .use(routes)
+        .use('/api',routes)
         .use(errorHandler)
 
     return app;
