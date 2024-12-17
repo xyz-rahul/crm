@@ -2,11 +2,24 @@ import { Request, Response } from 'express';
 import { User, Lead, Customer } from '../models';
 
 export const UserController = {
-    async createUser(req: Request, res: Response) {
-        const user = new User(req.body);
-        await user.save();
-        res.status(201).json(user);
+    async createAgent(req: Request, res: Response) {
+        const { name, email, managerId } = req.body;
+        const defaultPasswordForAgent = `#Password_{name}`
+        const role = 'agent'
+        const user = new User({ name, email, password: defaultPasswordForAgent, role, managerId });
+        const savedUser = await user.save();
+        res.status(201).json(savedUser);
     },
+    // async createManager(req: Request, res: Response) {
+    //     const user = new User(req.body);
+    //     const savedUser = await user.save();
+    //     res.status(201).json(savedUser);
+    // },
+    // async createUser(req: Request, res: Response) {
+    //     const user = new User(req.body);
+    //     const savedUser = await user.save();
+    //     res.status(201).json(savedUser);
+    // },
 
     async getAllUsers(req: Request, res: Response) {
         const users = await User.find();

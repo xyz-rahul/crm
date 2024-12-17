@@ -5,7 +5,8 @@ export interface IUser {
     name: string;
     email: string;
     password: string;
-    role: 'admin' | 'manager' | 'employee';
+    role: 'admin' | 'manager' | 'employee' | 'agent';
+    managerId?: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -48,9 +49,16 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String,
         required: true,
     },
+    managerId: {
+        type: String,
+        required: function() {
+            return this.role === 'agent'
+        }
+    },
     role: {
         type: String,
-        enum: ['admin', 'manager', 'employee'],
+        enum: ['admin', 'manager', 'employee', 'agent'],
+        default: "manager",
         required: true,
     },
 }, { timestamps: true });
