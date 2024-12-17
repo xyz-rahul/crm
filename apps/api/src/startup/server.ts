@@ -38,7 +38,7 @@ export default function createServer(): express.Express {
                 autoRemoveInterval: 1
             })
         }))
-        .get('/status', (req, res) => {
+        .get('/api/status', (req, res) => {
             res.json({ status: 'OK' });
         })
         .use('/api',routes)
