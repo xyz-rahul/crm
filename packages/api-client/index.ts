@@ -73,6 +73,7 @@ export async function createLead(data: Lead) {
 
 export async function getAllLeads(page?: string | number) {
     try {
+        console.log('get all lead')
         const response: AxiosResponse<LeadsResponse> = await api.get(`/lead?page=${page}`);
         return response.data;
     } catch (error: any) {
@@ -102,6 +103,20 @@ export async function updateLeadById(id: string, data: Lead) {
     }
 };
 
+export async function getLeadReport() {
+    try {
+        const response: AxiosResponse<{
+            thisYear: { count: number },
+            thisMonth: { count: number },
+            thisWeek: { count: number }
+        }> = await api.get(`/report/lead`);
+        return response.data;
+    } catch (error: any) {
+        if (error instanceof AxiosError && error.status === 404) throw new Error(error.response?.data?.message || 'Lead not found');
+        else if (error instanceof AxiosError) throw new Error(error.response?.data?.message || 'Internal Server Error');
+        throw new Error('Internal Server Error');
+    }
+};
 
 
 export async function getAllUsers(page?: string | number) {

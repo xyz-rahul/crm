@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react'
 import { Link } from 'react-router'
 import { Button } from "@/components/ui/button"
 import { PlusIcon } from 'lucide-react'
@@ -13,8 +14,9 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { getAllLeads, getLeadReport } from '@myorg/api-client'
 import Error from './ui/custom/Error'
-import { LeadsResponse } from '@myorg/types'
+import { LeadsResponse, SearchItem } from '@myorg/types'
 import clsx from 'clsx'
+import SearchBar from './SearchBar'
 
 
 export const Home = () => {
@@ -27,8 +29,44 @@ export const Home = () => {
         queryFn: () => getLeadReport(),
         queryKey: ['leadSummary'],
     });
+
+    const [filter, setFilter] = React.useState<string>("")
+    const searchQuery = useQuery({
+        queryFn: () => {
+            return [
+                {
+                    "_id": "67629518d1de2ba589a8619f",
+                    "name": "Carol Keeling",
+                    type: "lead",
+                },
+                {
+                    "_id": "67629518d1de2ba589a8619f",
+                    "name": "Carol Keeling",
+                    type: "lead",
+                },
+                {
+                    "_id": "67629518d1de2ba589a8619f",
+                    "name": "Carol Keeling",
+                    type: "lead",
+                },
+                {
+                    "_id": "67629518d1de2ba589a8619f",
+                    "name": "Carol Keeling",
+                    type: "lead",
+                },
+                {
+                    "_id": "67629518d1de2ba589a8619f",
+                    "name": "Carol Keeling",
+                    type: "lead",
+                }
+            ]
+        },
+        queryKey: [filter]
+    })
+    console.log(searchQuery.data)
     return (
         <div className="p-4">
+            <SearchBar onChange={setFilter} data={searchQuery.data} />
             <div className="flex m-8 gap-8">
                 <AddLead />
                 {leadSummaryQuery.isLoading ? (

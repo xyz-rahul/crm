@@ -48,3 +48,10 @@ export interface LeadsResponse {
     };
 
 }
+
+export type SearchItem = {
+  _id: string;
+  name: string;
+  type: string;
+};
+

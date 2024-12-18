@@ -90,30 +90,41 @@ export const LeadController = {
             })
             .catch((error) => res.status(500).json({ error: error.message }));
     },
+    async getReport(req: Request, res: Response) {
 
-    async getMonthlyReport(req: Request, res: Response) {
-        var currentMonth = new Date().getMonth() + 1;
+        const now = new Date();
+
+        // Calculate date ranges
+        const startOfYear = new Date(now.getFullYear(), 0, 1); // Jan 1st of this year
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // 1st day of this month
+        const startOfWeek = new Date(now); // Start of this week
+        startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday of this week
 
         const [data, err] = await Lead.aggregate([
             {
-                $match: {
-                    $expr: {
-                        $eq: [{ $date: "$createdAt" }, currentMonth]
-                    }
-                }
+                $facet: {
+                    thisYear: [
+                        { $match: { createdAt: { $gte: startOfYear }, }, },
+                        { $count: "count", },
+                    ],
+                    thisMonth: [
+                        { $match: { createdAt: { $gte: startOfMonth }, }, },
+                        { $count: "count", },
+                    ],
+                    thisWeek: [
+                        { $match: { createdAt: { $gte: startOfWeek }, }, },
+                        { $count: "count", },
+                    ],
+                },
             },
-            {
-                $group: {
-                    _id: { $dayOfMonth: "$date" },
-                    // totalSales: { $sum: "$amount" }
-                }
-            },
-            {
-                $sort: { "_id": 1 }
-            }
-        ])
-        res.json(data)
 
+            { $unwind: "$thisYear" },
+            { $unwind: "$thisMonth" },
+            { $unwind: "$thisWeek" },
+        ]);
+
+        if (data) res.json(data)
+        else throw new Error(err)
     }
 };
 
