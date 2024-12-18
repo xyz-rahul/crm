@@ -16,9 +16,5 @@ export const useAuthStore = {
         localStorage.removeItem('user')
         logout()
     },
-
-    isUserLoggedIn(): boolean {
-        return !!this.getUser()
-    },
 }
 

@@ -59,6 +59,18 @@ export async function logout() {
     }
 };
 
+export async function createLead(data: Lead) {
+    try {
+        console.log('create lead', data)
+        const response: AxiosResponse<Lead> = await api.post('/lead', data);
+        console.log('response', response)
+        return response.data;
+    } catch (error: any) {
+        if (error instanceof AxiosError) throw new Error(error.response?.data?.message || 'Internal Server Error');
+        throw new Error('Internal Server Error');
+    }
+}
+
 export async function getAllLeads() {
     try {
         const response: AxiosResponse<LeadsResponse> = await api.get('/lead');
@@ -82,6 +94,29 @@ export async function getLeadById(id: string) {
 export async function updateLeadById(id: string, data: Lead) {
     try {
         const response: AxiosResponse<LeadResponse> = await api.put(`/lead/${id}`, data);
+        return response.data;
+    } catch (error: any) {
+        if (error instanceof AxiosError && error.status === 404) throw new Error(error.response?.data?.message || 'Lead not found');
+        else if (error instanceof AxiosError) throw new Error(error.response?.data?.message || 'Internal Server Error');
+        throw new Error('Internal Server Error');
+    }
+};
+
+
+
+export async function getAllUsers() {
+    try {
+        const response: AxiosResponse<User[]> = await api.get('/user');
+        return response.data;
+    } catch (error: any) {
+        if (error instanceof AxiosError) throw new Error(error.response?.data?.message || 'Internal Server Error');
+        throw new Error('Internal Server Error');
+    }
+}
+
+export async function getUserById(id: string) {
+    try {
+        const response: AxiosResponse<User> = await api.get(`/user/${id}`);
         return response.data;
     } catch (error: any) {
         if (error instanceof AxiosError && error.status === 404) throw new Error(error.response?.data?.message || 'Lead not found');

@@ -5,8 +5,8 @@ export type User = {
     password: string
     role: 'admin' | 'manager' | 'employee' | 'agent'
     managerId?: string
-    createdAt?: Date
-    updatedAt?: Date
+    createdAt?: string
+    updatedAt?: string
 }
 
 

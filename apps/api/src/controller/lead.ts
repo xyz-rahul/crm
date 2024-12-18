@@ -3,6 +3,7 @@ import { Lead, User } from '../models';
 
 export const LeadController = {
     async createLead(req: Request, res: Response) {
+        console.log('create lead')
         const { name, email, phone, status, userId } = req.body; // userId is the reference to User
 
         const user = await User.findById(userId);

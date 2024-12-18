@@ -8,9 +8,9 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 
 export const Dashboard = (props: {}) => {
     const navigate = useNavigate();
-    const isLoggedIn = useAuthStore.isUserLoggedIn;
+    const getUser = useAuthStore.getUser;
     useEffect(() => {
-        if (!isLoggedIn) navigate('/login')
+        if (!getUser()) navigate('/login')
     }, [])
     return (
         <>
