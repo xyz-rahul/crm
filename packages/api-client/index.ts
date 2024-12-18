@@ -71,9 +71,9 @@ export async function createLead(data: Lead) {
     }
 }
 
-export async function getAllLeads() {
+export async function getAllLeads(page?: string | number) {
     try {
-        const response: AxiosResponse<LeadsResponse> = await api.get('/lead');
+        const response: AxiosResponse<LeadsResponse> = await api.get(`/lead?page=${page}`);
         return response.data;
     } catch (error: any) {
         if (error instanceof AxiosError) throw new Error(error.response?.data?.message || 'Internal Server Error');

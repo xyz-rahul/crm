@@ -4,14 +4,20 @@ import { Loader } from './ui/custom/Loader';
 import Error from './ui/custom/Error';
 import { LeadsResponse } from '@myorg/types';
 import clsx from 'clsx';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
+import PaginationNav from './PaginationNav';
+
+
 
 export default function Leads() {
-    const { data, isLoading, error, isError } = useQuery({
-        queryFn: getAllLeads,
-        queryKey: ['leads'],
-    });
+    const [searchParams, setSearchParams] = useSearchParams({ page: "1", limit: "10" });
+    const page = Number(searchParams.get("page"))
+    const limit = Number(searchParams.get("limit"))
 
+    const { data, isLoading, isError } = useQuery({
+        queryFn: () => getAllLeads(page),
+        queryKey: ['leads', page],
+    });
     return (
         <>
             {isLoading ? (
@@ -31,8 +37,12 @@ export default function Leads() {
                         </thead>
                         <TableData data={data} />
                     </table>
+                    <div className="absolute bottom-0 w-full flex justify-center">
+                    <PaginationNav page={page} totalPages={Math.ceil(data.pageInfo.totalCount / limit)} setSearchParams={setSearchParams} />
+                    </div>
                 </>
             )}
+
 
         </>
     );
@@ -47,11 +57,11 @@ export function TableData({ data }: { data: LeadsResponse }) {
                         key={lead._id}
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                     >
-                        <Link to={`/lead/${lead._id}`}>
-                            <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                        <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                            <Link to={`/lead/${lead._id}`}>
                                 {lead.name}
-                            </td>
-                        </Link>
+                            </Link>
+                        </td>
                         <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
                             {lead.phone}
                         </td>
@@ -70,13 +80,13 @@ export function TableData({ data }: { data: LeadsResponse }) {
                             </span>
 
                         </td>
-                        <Link to={`/user/${lead.user._id}`}>
-                            <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                        <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                            <Link to={`/user/${lead.user._id}`}>
                                 <span className="py-2 px-4 rounded-2xl bg-gray-200" >
                                     {lead.user.name}
                                 </span>
-                            </td>
-                        </Link>
+                            </Link>
+                        </td>
                     </tr>
                 ))
             ) : (
@@ -93,4 +103,8 @@ export function TableData({ data }: { data: LeadsResponse }) {
         </tbody >
     )
 }
+
+
+
+
 

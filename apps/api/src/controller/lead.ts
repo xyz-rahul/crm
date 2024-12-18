@@ -44,9 +44,9 @@ export const LeadController = {
                     pageInfo: [
                         { $count: "totalCount" },
                     ],
-
                 }
-            }
+            },
+            { $unwind: "$pageInfo" }
         ]);
 
         if (data) res.json(data);
@@ -90,5 +90,30 @@ export const LeadController = {
             })
             .catch((error) => res.status(500).json({ error: error.message }));
     },
+
+    async getMonthlyReport(req: Request, res: Response) {
+        var currentMonth = new Date().getMonth() + 1;
+
+        const [data, err] = await Lead.aggregate([
+            {
+                $match: {
+                    $expr: {
+                        $eq: [{ $date: "$createdAt" }, currentMonth]
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: { $dayOfMonth: "$date" },
+                    // totalSales: { $sum: "$amount" }
+                }
+            },
+            {
+                $sort: { "_id": 1 }
+            }
+        ])
+        res.json(data)
+
+    }
 };
 

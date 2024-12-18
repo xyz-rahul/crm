@@ -33,6 +33,7 @@ router.get('/lead', AuthMiddleware(['manager', 'agent']), LeadController.getAllL
 router.get('/lead/:id', AuthMiddleware(['manager', 'agent']), LeadController.getLeadById);
 router.put('/lead/:id', AuthMiddleware(['manager', 'agent']), LeadController.updateLead);
 router.delete('/lead/:id', AuthMiddleware(['manager', 'agent']), LeadController.deleteLead);
+router.get('/lead-report/month', AuthMiddleware(['manager']), LeadController.getMonthlyReport);
 
 // Customer Routes
 router.post('/customer', AuthMiddleware(['manager', 'agent']), CustomerController.createCustomer);
