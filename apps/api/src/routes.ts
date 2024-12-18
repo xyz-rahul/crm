@@ -12,7 +12,7 @@ function AuthMiddleware(roles: string[] = []) {
         const role = req.session.user?.role!;
         if (!roles || roles.length === 0) next();
         else if (roles.includes(role) || role === 'admin') next();
-        else res.status(401).json({ message: "Access Denied" });
+        else res.status(403).json({ message: "Forbidden" });
     }
 }
 

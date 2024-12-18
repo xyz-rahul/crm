@@ -32,8 +32,11 @@ export const Home = () => {
 
     const [filter, setFilter] = React.useState<string>("")
     const searchQuery = useQuery({
-        queryFn: () => getSearchResult(filter),
-        queryKey: [filter]
+        queryFn: () => {
+            if (filter.length > 0)
+                return getSearchResult(filter)
+        },
+        queryKey: [filter],
     })
     console.log(searchQuery.data)
     return (
