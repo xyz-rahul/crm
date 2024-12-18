@@ -3,8 +3,6 @@ import AppSidebar from '@/components/AppSidebar'
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router'
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-// import { AppSidebar } from "@/components/app-sidebar"
-
 
 export const Dashboard = (props: {}) => {
     const navigate = useNavigate();
@@ -14,13 +12,12 @@ export const Dashboard = (props: {}) => {
     }, [])
     return (
         <>
-            <SidebarProvider>
+            <div className="flex">
                 <AppSidebar />
-                <SidebarTrigger />
                 <div className='w-full'>
                     <Outlet />
                 </div>
-            </SidebarProvider>
+            </div>
         </>
     )
 }

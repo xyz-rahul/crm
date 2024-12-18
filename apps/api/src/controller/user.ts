@@ -12,8 +12,33 @@ export const UserController = {
     },
 
     async getAllUsers(req: Request, res: Response) {
-        const users = await User.find();
-        res.status(200).json(users);
+        // const users = await User.find();
+        // res.status(200).json(users);
+
+
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+
+        const [data, err] = await User.aggregate([
+            {
+                $facet: {
+                    users: [
+                        { $sort: { createdAt: -1 } },
+
+                        { $skip: (page - 1) * limit },
+                        { $limit: limit },
+                    ],
+                    pageInfo: [
+                        { $count: "totalCount" },
+                    ],
+                }
+            },
+            { $unwind: "$pageInfo" }
+        ]);
+
+        if (data) res.json(data);
+        else throw new Error(err)
+
     },
 
     async getUserById(req: Request, res: Response) {

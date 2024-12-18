@@ -1,4 +1,4 @@
-import { Lead, LeadResponse, LeadsResponse, User } from '@myorg/types';
+import { Lead, LeadResponse, LeadsResponse, User, UserAllResponse } from '@myorg/types';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 const api = axios.create({
@@ -104,9 +104,9 @@ export async function updateLeadById(id: string, data: Lead) {
 
 
 
-export async function getAllUsers() {
+export async function getAllUsers(page?: string | number) {
     try {
-        const response: AxiosResponse<User[]> = await api.get('/user');
+        const response: AxiosResponse<UserAllResponse> = await api.get(`/user?page=${page}`);
         return response.data;
     } catch (error: any) {
         if (error instanceof AxiosError) throw new Error(error.response?.data?.message || 'Internal Server Error');

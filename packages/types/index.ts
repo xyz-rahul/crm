@@ -9,6 +9,12 @@ export type User = {
     updatedAt?: string
 }
 
+export type UserAllResponse = {
+    users: User[],
+    pageInfo: {
+        totalCount: string
+    }
+}
 
 export interface Lead {
     _id?: string;

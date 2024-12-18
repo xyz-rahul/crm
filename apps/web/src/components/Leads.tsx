@@ -26,19 +26,21 @@ export default function Leads() {
                 <Error />
             ) : (
                 <>
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <th scope="col" className="px-6 py-3">Lead Name</th>
-                                <th scope="col" className="px-6 py-3">Phone</th>
-                                <th scope="col" className="px-6 py-3">Status</th>
-                                <th scope="col" className="px-6 py-3">ManageBy</th>
-                            </tr>
-                        </thead>
-                        <TableData data={data} />
-                    </table>
-                    <div className="absolute bottom-0 w-full flex justify-center">
-                    <PaginationNav page={page} totalPages={Math.ceil(data.pageInfo.totalCount / limit)} setSearchParams={setSearchParams} />
+                    <div className="flex flex-col items-center align-middle w-full">
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" className="px-6 py-3">Lead Name</th>
+                                    <th scope="col" className="px-6 py-3">Phone</th>
+                                    <th scope="col" className="px-6 py-3">Status</th>
+                                    <th scope="col" className="px-6 py-3">ManageBy</th>
+                                </tr>
+                            </thead>
+                            <TableData data={data} />
+                        </table>
+                        <div className="fixed bottom-0 w-full flex justify-center p-4">
+                            <PaginationNav page={page} totalPages={Math.ceil(data.pageInfo.totalCount / limit)} setSearchParams={setSearchParams} />
+                        </div>
                     </div>
                 </>
             )}
