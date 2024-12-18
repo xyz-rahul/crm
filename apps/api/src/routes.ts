@@ -17,6 +17,7 @@ function AuthMiddleware(roles: string[] = []) {
 
 router.post('/auth/signup', AuthController.signUpAsManager);
 router.post('/auth/login', AuthController.login);
+router.get('/auth/isLoggedIn', AuthController.isLoggedIn);
 router.get('/auth/logout', AuthController.logout);
 
 // User Routes

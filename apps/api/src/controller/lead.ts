@@ -14,21 +14,61 @@ export const LeadController = {
             .catch((error) => res.status(400).json({ error: error.message }));
     },
 
-    getAllLeads(req: Request, res: Response) {
-        Lead.find()
-            .populate('userId', 'name email')
-            .then((leads) => res.status(200).json(leads))
-            .catch((error) => res.status(500).json({ error: error.message }));
+    async getAllLeads(req: Request, res: Response) {
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+
+        const [data, err] = await Lead.aggregate([
+            {
+                $facet: {
+                    leads: [
+                        { $sort: { createdAt: -1 } },
+
+                        { $skip: (page - 1) * limit },
+                        { $limit: limit },
+
+                        {
+                            $lookup: {
+                                from: User.collection.name,
+                                localField: "userId",
+                                foreignField: "_id",
+                                as: "user",
+                                pipeline: [
+                                    { $project: { _id: 1, name: 1, role: 1 } }
+                                ]
+                            }
+                        },
+                        { $unwind: "$user" }
+                    ],
+                    pageInfo: [
+                        { $count: "totalCount" },
+                    ],
+
+                }
+            }
+        ]);
+
+        if (data) res.json(data);
+        else throw new Error(err)
     },
 
-    getLeadById(req: Request, res: Response) {
-        Lead.findById(req.params.id)
-            .populate('userId', 'name email')
-            .then((lead) => {
-                if (!lead) return res.status(404).json({ error: 'Lead not found' });
-                res.status(200).json(lead);
-            })
-            .catch((error) => res.status(500).json({ error: error.message }));
+    async getLeadById(req: Request, res: Response) {
+        const [data, err] = await Lead.aggregate([{
+            $lookup: {
+                from: User.collection.name,
+                localField: "userId",
+                foreignField: "_id",
+                as: "user",
+                pipeline: [
+                    { $project: { _id: 1, name: 1, role: 1 } }
+                ]
+            }
+        },
+        { $unwind: "$user" }
+        ]);
+
+        if (data) res.json(data)
+        else throw new Error(err)
     },
 
     updateLead(req: Request, res: Response) {

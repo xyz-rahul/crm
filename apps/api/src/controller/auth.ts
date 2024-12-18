@@ -52,6 +52,14 @@ export const AuthController = {
             res.json(user);
         }
     },
+    async isLoggedIn(req: Request, res: Response) {
+        const email = req.session.user?.email!;
+        const user = await User.findOne({
+            "email": email,
+        })
+
+        res.json(user);
+    },
 
     async logout(req: Request, res: Response) {
 

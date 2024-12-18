@@ -19,7 +19,7 @@ type Inputs = {
 
 export default function Login() {
     const navigate = useNavigate();
-    const setUser = useAuthStore.getState().setUser;
+    const setUser = useAuthStore.setUser;
     const {
         register,
         handleSubmit,
@@ -30,7 +30,7 @@ export default function Login() {
         try {
             const user: User = await login(data)
             setUser(user)
-            navigate('/dashboard')
+            navigate('/')
         } catch (error: any) {
             setError('email', { message: error?.message || "something unexpected occur" })
         }
