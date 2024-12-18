@@ -13,6 +13,7 @@ import Users from '@/components/Users.tsx';
 import UserInfo from './components/UserInfo.tsx';
 import AddLead from './components/AddLead.tsx';
 import { useAuthStore } from './lib/authStore.ts';
+import NotFound from './components/NotFound.tsx';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -74,6 +75,7 @@ createRoot(document.getElementById('root')!).render(
                     </Route>
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<SignUp />} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
         </QueryClientProvider>
