@@ -1,6 +1,7 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import { useAuthStore } from "@/lib/authStore"
+import { Calendar, Home, Inbox, Search, Settings, LogOut } from "lucide-react"
 
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 const items = [
     {
         title: "Home",
@@ -21,8 +22,9 @@ const items = [
 
 
 export default function AppSidebar() {
+    const navigate = useNavigate();
     return (
-        <div className="h-full px-3 py-4  bg-gray-50 dark:bg-gray-800 w-[250px] h-screen transition-transform -translate-x-full sm:translate-x-0">
+        <div className="px-3 py-4  bg-gray-50 dark:bg-gray-800 w-[250px] h-screen transition-transform -translate-x-full sm:translate-x-0">
             <ul className="space-y-2 font-medium">
                 {items.map((item, index) => (
                     <li key={index}>
@@ -35,6 +37,21 @@ export default function AppSidebar() {
                         </Link>
                     </li>
                 ))}
+
+
+                <li>
+                    <button
+                        className="flex items-center p-2 text-gray-900 cursor-pointer rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        onClick={() => {
+                            useAuthStore.logout();
+                            navigate('/login');
+
+                        }}
+                    >
+                        <LogOut />
+                        <span className="ms-3">Logout</span>
+                    </button>
+                </li>
 
             </ul>
         </div>
