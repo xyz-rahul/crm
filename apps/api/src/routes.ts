@@ -3,6 +3,7 @@ import { UserController } from './controller/user'
 import { LeadController } from './controller/lead'
 import { CustomerController } from './controller/customer'
 import { AuthController } from './controller/auth';
+import { search } from './controller/search';
 
 const router = express.Router() as express.Router;
 
@@ -42,5 +43,6 @@ router.get('/customer/:id', AuthMiddleware(['manager', 'agent']), CustomerContro
 router.put('/customer/:id', AuthMiddleware(['manager', 'agent']), CustomerController.updateCustomer);
 router.delete('/customer/:id', AuthMiddleware(['manager', 'agent']), CustomerController.deleteCustomer);
 
+router.get('/search/:key', AuthMiddleware(['manager', 'agent']),search);
 export default router;
 

@@ -50,8 +50,8 @@ export interface LeadsResponse {
 }
 
 export type SearchItem = {
-  _id: string;
-  name: string;
-  type: string;
+    _id: string;
+    name: string;
+    type: "user" | "lead"
 };
 

@@ -1,4 +1,4 @@
-import { Lead, LeadResponse, LeadsResponse, User, UserAllResponse } from '@myorg/types';
+import { Lead, LeadResponse, LeadsResponse, SearchItem, User, UserAllResponse } from '@myorg/types';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
 const api = axios.create({
@@ -132,6 +132,17 @@ export async function getAllUsers(page?: string | number) {
 export async function getUserById(id: string) {
     try {
         const response: AxiosResponse<User> = await api.get(`/user/${id}`);
+        return response.data;
+    } catch (error: any) {
+        if (error instanceof AxiosError && error.status === 404) throw new Error(error.response?.data?.message || 'Lead not found');
+        else if (error instanceof AxiosError) throw new Error(error.response?.data?.message || 'Internal Server Error');
+        throw new Error('Internal Server Error');
+    }
+};
+
+export async function getSearchResult(key: string) {
+    try {
+        const response: AxiosResponse<SearchItem[]> = await api.get(`/search/${key}`);
         return response.data;
     } catch (error: any) {
         if (error instanceof AxiosError && error.status === 404) throw new Error(error.response?.data?.message || 'Lead not found');

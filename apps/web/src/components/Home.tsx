@@ -12,7 +12,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { useQuery } from '@tanstack/react-query'
-import { getAllLeads, getLeadReport } from '@myorg/api-client'
+import { getAllLeads, getLeadReport, getSearchResult } from '@myorg/api-client'
 import Error from './ui/custom/Error'
 import { LeadsResponse, SearchItem } from '@myorg/types'
 import clsx from 'clsx'
@@ -32,35 +32,7 @@ export const Home = () => {
 
     const [filter, setFilter] = React.useState<string>("")
     const searchQuery = useQuery({
-        queryFn: () => {
-            return [
-                {
-                    "_id": "67629518d1de2ba589a8619f",
-                    "name": "Carol Keeling",
-                    type: "lead",
-                },
-                {
-                    "_id": "67629518d1de2ba589a8619f",
-                    "name": "Carol Keeling",
-                    type: "lead",
-                },
-                {
-                    "_id": "67629518d1de2ba589a8619f",
-                    "name": "Carol Keeling",
-                    type: "lead",
-                },
-                {
-                    "_id": "67629518d1de2ba589a8619f",
-                    "name": "Carol Keeling",
-                    type: "lead",
-                },
-                {
-                    "_id": "67629518d1de2ba589a8619f",
-                    "name": "Carol Keeling",
-                    type: "lead",
-                }
-            ]
-        },
+        queryFn: () => getSearchResult(filter),
         queryKey: [filter]
     })
     console.log(searchQuery.data)

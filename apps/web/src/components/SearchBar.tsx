@@ -1,10 +1,10 @@
 import { SearchItem } from "@myorg/types";
 import clsx from "clsx";
 import pDebounce from 'p-debounce';
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router";
 
-export default function SearchBar({ onChange, data }: { onChange: React.Dispatch<React.SetStateAction<string>>, data: SearchItem[] }) {
+export default function SearchBar({ onChange, data }: { onChange: React.Dispatch<React.SetStateAction<string>>, data: SearchItem[] | undefined }) {
     const [focused, setFocused] = useState(false)
     const debounceOnChange = pDebounce(onChange, 300);
     return (
@@ -54,7 +54,7 @@ export default function SearchBar({ onChange, data }: { onChange: React.Dispatch
 
                         {data?.map((item, index) => (
                             <Link
-                                key={index} // Key should be on the Link, not the div
+                                key={index}
                                 to={
                                     item.type === "lead"
                                         ? `/lead/${item._id}`
@@ -62,7 +62,7 @@ export default function SearchBar({ onChange, data }: { onChange: React.Dispatch
                                             ? `/user/${item._id}`
                                             : "#"
                                 }
-                                className="block" // Ensure the Link spans the full width of the div for easier clicks
+                                className="block"
                                 onFocus={() => setFocused(true)}
                                 onBlur={() => setFocused(false)}
                             >
