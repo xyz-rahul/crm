@@ -27,7 +27,6 @@ export const AuthController = {
 
     async login(req: Request, res: Response) {
         const { email, password } = req.body;
-        console.log(email, password);
         const user = await User.findOne({
             "email": email,
         })
@@ -48,7 +47,6 @@ export const AuthController = {
                 role: user.role
             }
 
-            console.log(req.session);
             res.json(user);
         }
     },

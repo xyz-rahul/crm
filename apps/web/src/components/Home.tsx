@@ -38,7 +38,6 @@ export const Home = () => {
         },
         queryKey: [filter],
     })
-    console.log(searchQuery.data)
     return (
         <div className="p-4">
             <SearchBar onChange={setFilter} data={searchQuery.data} />
