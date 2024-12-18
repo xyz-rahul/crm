@@ -37,7 +37,7 @@ export default function SignUp() {
         }
     }
     return (
-        <form className="p-6 md:p-8" onSubmit={handleSubmit(onSubmit)}>
+        <form className="p-6 md:p-8 flex justify-center" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6 w-[250px]">
                 <div className="flex flex-col items-center text-center">
                     <h1 className="text-2xl font-bold">Sign Up</h1>
