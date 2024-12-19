@@ -8,6 +8,7 @@ import { Loader2 } from 'lucide-react'
 import { useAuthStore } from '@/lib/authStore'
 import { User } from '@myorg/types'
 import { login } from '@myorg/api-client'
+import { AxiosError } from "axios"
 
 
 
@@ -32,7 +33,8 @@ export default function Login() {
             setUser(user)
             navigate('/')
         } catch (error: any) {
-            setError('email', { message: error?.message || "something unexpected occur" })
+            if (error instanceof AxiosError && error.status === 404) setError('root', { message: "Please provide correct email and password" })
+            else setError('email', { message: error?.message || "something unexpected occur" })
         }
     }
     return (
@@ -44,6 +46,13 @@ export default function Login() {
                         Login to your account
                     </p>
                 </div>
+                {errors.root?.message &&
+                    <Alert variant="destructive">
+                        <AlertDescription>
+                            {errors.root?.message}
+                        </AlertDescription>
+                    </Alert>
+                }
                 <div className="grid gap-2 text-left">
                     <Label htmlFor="email">Email</Label>
                     <Input
