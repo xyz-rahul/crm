@@ -6,6 +6,7 @@ import session from 'express-session'
 import mongoose from 'mongoose'
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
+import path from "path";
 
 declare module 'express-session' {
     interface SessionData {
@@ -44,6 +45,7 @@ export default function createServer(): express.Express {
         .get('/api/status', (req, res) => {
             res.json({ status: 'OK' });
         })
+        .use(express.static(path.join(__dirname,'../../../web/dist')))
         .use('/api', routes)
         .use(errorHandler)
 
