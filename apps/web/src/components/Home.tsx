@@ -154,7 +154,7 @@ function AddLead() {
                 </CardContent>
 
                 <CardFooter className="flex justify-between">
-                    <Button className='w-full'>Deploy</Button>
+                    <Button className='w-full'>Add Lead</Button>
                 </CardFooter>
             </Card>
         </Link>
