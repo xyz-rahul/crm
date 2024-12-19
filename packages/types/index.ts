@@ -1,13 +1,14 @@
-export type User = {
+export interface User {
     _id?: string
-    name: string
-    email: string
-    password: string
-    role: 'admin' | 'manager' | 'employee' | 'agent'
+    name?: string
+    email?: string
+    password?: string
+    role?: 'admin' | 'manager' | 'employee' | 'agent'
     managerId?: string
     createdAt?: string
     updatedAt?: string
 }
+export interface UserResponse extends User {}
 
 export type UserAllResponse = {
     users: User[],

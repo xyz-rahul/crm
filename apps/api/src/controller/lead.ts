@@ -1,5 +1,8 @@
 import { Request, Response } from 'express';
 import { Lead, User } from '../models';
+import mongoose from 'mongoose';
+
+const ObjectId = mongoose.Types.ObjectId;
 
 export const LeadController = {
     async createLead(req: Request, res: Response) {
@@ -53,28 +56,37 @@ export const LeadController = {
     },
 
     async getLeadById(req: Request, res: Response) {
-        const [data, err] = await Lead.aggregate([{
-            $lookup: {
-                from: User.collection.name,
-                localField: "userId",
-                foreignField: "_id",
-                as: "user",
-                pipeline: [
-                    { $project: { _id: 1, name: 1, role: 1 } }
-                ]
-            }
-        },
-        { $unwind: "$user" }
+        const [data, err] = await Lead.aggregate([
+            {
+                $match: {
+                    _id: new mongoose.Types.ObjectId(req.params.id)
+                }
+            },
+            {
+                $lookup: {
+                    from: User.collection.name,
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user",
+                    pipeline: [
+                        { $project: { _id: 1, name: 1, role: 1 } }
+                    ]
+                }
+            },
+            { $unwind: "$user" }
         ]);
+
 
         if (data) res.json(data)
         else throw new Error(err)
     },
 
     updateLead(req: Request, res: Response) {
+        console.log('update lead req', req.body)
         Lead.findByIdAndUpdate(req.params.id, req.body, { new: true })
             .then((lead) => {
                 if (!lead) return res.status(404).json({ error: 'Lead not found' });
+                console.log('200', lead)
                 res.status(200).json(lead);
             })
             .catch((error) => res.status(400).json({ error: error.message }));

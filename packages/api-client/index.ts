@@ -1,5 +1,5 @@
-import { Lead, LeadResponse, LeadsResponse, SearchItem, User, UserAllResponse } from '@myorg/types';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { Lead, LeadResponse, LeadsResponse, SearchItem, User, UserAllResponse, UserResponse } from '@myorg/types';
+import axios, { AxiosResponse } from 'axios';
 
 const api = axios.create({
     baseURL: '/api',
@@ -75,6 +75,11 @@ export async function getAllUsers(page?: string | number) {
 
 export async function getUserById(id: string) {
     const response: AxiosResponse<User> = await api.get(`/user/${id}`);
+    return response.data;
+};
+
+export async function updateUserById(id: string, data: User) {
+    const response: AxiosResponse<UserResponse> = await api.put(`/user/${id}`, data);
     return response.data;
 };
 

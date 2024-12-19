@@ -60,7 +60,7 @@ export default function LeadInfo() {
                             setInputField={setInputField}
                             isInputActive={isInputActive}
                             setIsInputActive={setIsInputActive}
-                            value={data?.email}
+                            value={data?.name}
                         >
                             <Label htmlFor="name" className="text-lg">Name:</Label>
                         </EditableField>
