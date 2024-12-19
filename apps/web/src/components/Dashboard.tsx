@@ -2,9 +2,8 @@ import { useAuthStore } from '@/lib/authStore';
 import AppSidebar from '@/components/AppSidebar'
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router'
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 
-export const Dashboard = (props: {}) => {
+export const Dashboard = () => {
     const navigate = useNavigate();
     const getUser = useAuthStore.getUser;
     useEffect(() => {

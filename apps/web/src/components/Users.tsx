@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getAllUsers } from '@myorg/api-client';
 import { Loader } from '@/components/ui/custom/Loader';
 import Error from './ui/custom/Error';
-import { User, UserAllResponse } from '@myorg/types';
+import { UserAllResponse } from '@myorg/types';
 import { Link, useSearchParams } from 'react-router';
 import PaginationNav from './PaginationNav';
 
@@ -36,7 +36,7 @@ export default function Users() {
                         </table>
 
                         <div className="fixed bottom-0 w-full flex justify-center p-4">
-                            <PaginationNav page={page} totalPages={Math.ceil(data.pageInfo.totalCount / limit)} setSearchParams={setSearchParams} />
+                            <PaginationNav page={page} totalPages={Math.ceil(Number(data.pageInfo.totalCount) / limit)} setSearchParams={setSearchParams} />
                         </div>
                     </div>
                 </>

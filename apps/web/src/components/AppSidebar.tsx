@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/lib/authStore"
-import { Calendar, Home, Inbox, Search, Settings, LogOut } from "lucide-react"
+import { Calendar, Home, Inbox, LogOut } from "lucide-react"
 
 import { Link, useNavigate } from 'react-router'
 const items = [

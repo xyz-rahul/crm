@@ -1,7 +1,6 @@
 import { getLeadById, updateLeadById } from '@myorg/api-client';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import clsx from 'clsx';
-import React, { useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react'
 import { Params, useParams } from 'react-router'
 import {
     Select,
@@ -12,19 +11,35 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Lead } from '@myorg/types';
+import { Loader2Icon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Label } from './ui/label';
+import EditableField from './EditableField';
 
 interface ParamTypes extends Params {
     id: string
 }
 export default function LeadInfo() {
+    const queryClient = useQueryClient();
+
     const { id } = useParams<ParamTypes>();
-    const { data, isLoading, error, isError } = useQuery({
-        queryFn: () => {
-            if (id) return getLeadById(id)
-        },
+    const { data } = useQuery({
+        queryFn: () => { if (id) return getLeadById(id) },
         queryKey: ['lead', { id }],
     });
+    const [isInputActive, setIsInputActive] = useState<{ [key: string]: boolean | undefined }>({ phone: false });
+    const [inputField, setInputField] = useState<{ [key: string]: string | undefined }>({}); // State for the editable data
+    const updateLeadInfoMutation = useMutation({
+        mutationFn: async () => {
+            console.log('aaaa', id, inputField)
+            if (id) updateLeadById(id, inputField)
+            queryClient.invalidateQueries(['lead'])
+            setIsInputActive({})
+            console.log('bbbb')
+        }
+    })
+
+
     return (
         <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
             <header className="mb-6">
@@ -35,21 +50,44 @@ export default function LeadInfo() {
                     General Information
                 </h2>
                 <div className="space-y-2">
-                    <p className="text-gray-600">
+                    <div className="text-gray-600">
                         <span className="font-semibold">ID:</span>{data?._id}
-                    </p>
-                    <p className="text-gray-600">
-                        <span className="font-semibold">Name:</span> {data?.name}
-                    </p>
-                    <p className="text-gray-600">
-                        <span className="font-semibold">Email:</span> {data?.email}
-                    </p>
-                    <p className="text-gray-600">
-                        <span className="font-semibold">Phone:</span> {data?.phone}
-                    </p>
+                    </div>
+                    <div className="text-gray-600">
+                        <EditableField
+                            keyField="name"
+                            inputField={inputField}
+                            setInputField={setInputField}
+                            isInputActive={isInputActive}
+                            setIsInputActive={setIsInputActive}
+                            value={data?.email}
+                        >
+                            <Label htmlFor="name" className="text-lg">Name:</Label>
+                        </EditableField>
+                        <EditableField
+                            keyField="email"
+                            inputField={inputField}
+                            setInputField={setInputField}
+                            isInputActive={isInputActive}
+                            setIsInputActive={setIsInputActive}
+                            value={data?.email}
+                        >
+                            <Label htmlFor="email" className="text-lg">Email:</Label>
+                        </EditableField>
+                        <EditableField
+                            keyField="phone"
+                            inputField={inputField}
+                            setInputField={setInputField}
+                            isInputActive={isInputActive}
+                            setIsInputActive={setIsInputActive}
+                            value={data?.phone}
+                        >
+                            <Label htmlFor="phone" className="text-lg">Phone:</Label>
+                        </EditableField>
+                    </div>
                     <p className="text-gray-600 flex gap-2 items-center">
                         <span className="font-semibold">Status:</span>
-                        <Select onValueChange={(e) => console.log(e)}>
+                        <Select onValueChange={(e) => console.log(e)} defaultValue={data?.status}>
                             <SelectTrigger className="w-[180px]">
                                 <SelectValue placeholder="Set Status" />
                             </SelectTrigger>
@@ -66,7 +104,7 @@ export default function LeadInfo() {
                         </Select>
                     </p>
                 </div>
-            </section>
+            </section >
             <hr className="my-6 border-gray-300" />
             <section>
                 <h2 className="text-lg font-semibold text-gray-700 mb-4">User Details</h2>
@@ -96,7 +134,24 @@ export default function LeadInfo() {
                     </p>
                 </div>
             </section>
-        </div>
+
+            <Button
+                onClick={() => {
+                    updateLeadInfoMutation.mutate()
+                }}
+                disabled={updateLeadInfoMutation.isLoading}
+                className="my-4"
+            >
+                {updateLeadInfoMutation.isLoading ?
+                    <>
+                        <Loader2Icon className="animate-spin" />
+                        Please wait
+                    </>
+                    :
+                    <> Update </>
+                }
+            </Button>
+        </div >
     )
 }
 

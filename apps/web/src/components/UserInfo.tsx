@@ -10,7 +10,7 @@ interface ParamTypes extends Params {
 
 export default function UserInfo() {
     const { id } = useParams<ParamTypes>();
-    const { data, isLoading, error, isError } = useQuery({
+    const { data, isLoading, isError } = useQuery({
         queryFn: () => {
             if (id) return getUserById(id);
         },

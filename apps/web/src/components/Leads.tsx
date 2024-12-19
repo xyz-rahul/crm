@@ -7,8 +7,6 @@ import clsx from 'clsx';
 import { Link, useSearchParams } from 'react-router';
 import PaginationNav from './PaginationNav';
 
-
-
 export default function Leads() {
     const [searchParams, setSearchParams] = useSearchParams({ page: "1", limit: "10" });
     const page = Number(searchParams.get("page"))

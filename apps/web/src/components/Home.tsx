@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router'
 import { Button } from "@/components/ui/button"
 import { PlusIcon } from 'lucide-react'
@@ -14,7 +14,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { getAllLeads, getLeadReport, getSearchResult } from '@myorg/api-client'
 import Error from './ui/custom/Error'
-import { LeadsResponse, SearchItem } from '@myorg/types'
+import { LeadsResponse } from '@myorg/types'
 import clsx from 'clsx'
 import SearchBar from './SearchBar'
 
