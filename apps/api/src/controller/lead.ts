@@ -52,6 +52,7 @@ export const LeadController = {
         ]);
 
         if (data) res.json(data);
+        else if (!data) res.json({ leads: [], pageInfo: { totalCount: 0 } }); //no record available
         else throw new Error(err)
     },
 
@@ -135,6 +136,12 @@ export const LeadController = {
         ]);
 
         if (data) res.json(data)
+        else if (!data) res.json(
+            {
+                thisYear: { count: 0 },
+                thisMonth: { count: 0 },
+                thisWeek: { count: 0 }
+            }) // no record available
         else throw new Error(err)
     }
 };

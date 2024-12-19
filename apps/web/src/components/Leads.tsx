@@ -37,7 +37,9 @@ export default function Leads() {
                             <TableData data={data} />
                         </table>
                         <div className="fixed bottom-0 w-full flex justify-center p-4">
-                            <PaginationNav page={page} totalPages={Math.ceil(data.pageInfo.totalCount / limit)} setSearchParams={setSearchParams} />
+                            {data?.pageInfo?.totalCount &&
+                                <PaginationNav page={page} totalPages={Math.ceil(data.pageInfo.totalCount / limit)} setSearchParams={setSearchParams} />
+                            }
                         </div>
                     </div>
                 </>
