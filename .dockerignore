@@ -1,0 +1,30 @@
+# Ignore node_modules to prevent uploading them to the Docker build context
+node_modules
+
+# Ignore build outputs
+dist
+build
+
+# Ignore environment files
+.env
+.env.local
+
+# Ignore logs
+logs
+*.log
+
+# Ignore temporary files
+tmp
+*.tmp
+*.swp
+*.pid
+*.pid.lock
+
+# Ignore Git-related files
+.git
+.gitignore
+
+# Ignore Docker-related files that shouldn’t be in the build context
+.dockerignore
+docker-compose.override.yml
+
