@@ -8,8 +8,16 @@ import { Loader2 } from 'lucide-react'
 import { useAuthStore } from '@/lib/authStore'
 import { User } from '@myorg/types'
 import { signup } from '@myorg/api-client'
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
 
+
+const schema = z.object({
+    name: z.string().min(1, { message: 'Required' }),
+    email: z.string().email(),
+    password: z.string().min(5, { message: 'At leat 5 character' })
+});
 
 type Inputs = {
     name: string
@@ -26,14 +34,14 @@ export default function SignUp() {
         handleSubmit,
         setError,
         formState: { errors, isSubmitting },
-    } = useForm<Inputs>()
+    } = useForm<Inputs>({ resolver: zodResolver(schema) })
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         try {
             const user: User = await signup(data)
             setUser(user)
             navigate('/')
         } catch (error: any) {
-            setError('email', { message: error?.message || "something unexpected occur" })
+            setError('root', { message: error?.message || "something unexpected occur" })
         }
     }
     return (
@@ -55,6 +63,13 @@ export default function SignUp() {
                         {...register("name", { required: true })}
                     />
                 </div>
+                {errors.name?.message &&
+                    <Alert variant="destructive">
+                        <AlertDescription>
+                            {errors.name?.message}
+                        </AlertDescription>
+                    </Alert>
+                }
                 <div className="grid gap-2 text-left">
                     <Label htmlFor="email">Email</Label>
                     <Input
