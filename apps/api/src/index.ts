@@ -1,8 +1,10 @@
 import 'express-async-errors'; // should be imported before express is called
 import createServer from './startup/server';
 import mongoConnection from './startup/db';
+import 'dotenv/config'
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
+if(!PORT) throw new Error("PORT not provided")
 const server = createServer();
 
 mongoConnection.once('open', () => {
