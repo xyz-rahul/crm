@@ -16,6 +16,9 @@ declare module 'express-session' {
     }
 }
 
+const SESSION_SECRET = process.env.SESSION_SECRET;
+if (!SESSION_SECRET) throw new Error('SESSION_SECRET not provided');
+
 export default function createServer(): express.Express {
     const app = express();
     app
@@ -25,7 +28,7 @@ export default function createServer(): express.Express {
         .use(cookieParser())
         .use(cors())
         .use(session({
-            secret: 'secret',
+            secret: SESSION_SECRET!,
             resave: true,
             saveUninitialized: false,
             cookie: { maxAge: 24 * 60 * 60 * 1000 },
@@ -41,7 +44,7 @@ export default function createServer(): express.Express {
         .get('/api/status', (req, res) => {
             res.json({ status: 'OK' });
         })
-        .use('/api',routes)
+        .use('/api', routes)
         .use(errorHandler)
 
     return app;

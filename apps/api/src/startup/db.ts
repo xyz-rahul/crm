@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const mongoURL = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/myapp';
+const mongoURL = process.env.MONGO_URL;
+if (!mongoURL) throw new Error('MongoURL not provided')
 
 mongoose.connect(mongoURL);
 

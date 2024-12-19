@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { User } from '../models';
 import bcrypt from 'bcrypt';
 
-const secret = 'secret';
 export const AuthController = {
     async signUpAsManager(req: Request, res: Response) {
         const { name, email, password } = req.body;
