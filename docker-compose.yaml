@@ -21,8 +21,6 @@ services:
       - mongodb
     networks:
       - app_network
-    ports:
-      - 3001:3001
 
   web:
     container_name: web
@@ -51,6 +49,13 @@ services:
     networks:
       - app_network
 
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes: 
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email {me.rahulkumar@icloud.com} -d {domain} --agree-tos
 # volumes:
   # No named volume is required for MongoDB since we're using a host volume
   # mongo-data:
