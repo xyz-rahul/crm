@@ -4,6 +4,7 @@ import { ErrorRequestHandler, Request, Response, NextFunction } from 'express'
 import { JsonWebTokenError } from 'jsonwebtoken';
 
 export default function(error: ErrorRequestHandler, req: Request, res: Response, next: NextFunction) {
+    console.log('error', error)
     if (error instanceof mongodb.MongoServerError) {
         res.status(400).json({ name: error.name, message: error.errmsg });
     }

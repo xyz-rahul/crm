@@ -2,10 +2,13 @@ services:
   mongodb:
     image: mongo:6.0
     container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - 27017:27017
     volumes:
       - ./mongo-data:/data/db # Host volume mounted to MongoDB container
-    networks:
-      - app_network
+    # networks:
+    #   - app_network
 
   api:
     container_name: api
@@ -19,8 +22,10 @@ services:
     restart: always
     depends_on:
       - mongodb
-    networks:
-      - app_network
+    # networks:
+    #   - app_network
+    ports:
+      - 3001:3001
 
   web:
     container_name: web
@@ -30,15 +35,17 @@ services:
     environment:
       PORT: 3000
     restart: always
-    networks:
-      - app_network
+    ports:
+      - 3000:3000
+    # networks:
+    #   - app_network
 
   nginx:
     image: nginx:latest
     container_name: nginx
     restart: always
     ports:
-      - 80:80
+      - 8080:80
       - 443:443
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
@@ -46,20 +53,20 @@ services:
     depends_on:
       - web
       - api
-    networks:
-      - app_network
+  #   networks:
+  #     - app_network
 
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes: 
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email {me.rahulkumar@icloud.com} -d {domain} --agree-tos
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes: 
+  #     - ./certbot/conf:/etc/letsencrypt
+  #     - ./certbot/www:/var/www/certbot
+  #   command: certonly --webroot -w /var/www/certbot --force-renewal --email {me.rahulkumar@icloud.com} -d {domain} --agree-tos
 # volumes:
   # No named volume is required for MongoDB since we're using a host volume
   # mongo-data:
 
-networks:
-  app_network:
-    driver: bridge
+# networks:
+#   app_network:
+#     driver: bridge

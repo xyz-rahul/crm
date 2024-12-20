@@ -43,6 +43,7 @@ export default function createServer(): express.Express {
             })
         }))
         .get('/api/status', (req, res) => {
+            console.log('api status')
             res.json({ status: 'OK' });
         })
         .use(express.static(path.join(__dirname,'../../../web/dist')))

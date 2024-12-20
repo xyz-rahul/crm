@@ -26,6 +26,7 @@ export async function signup(data:
     }
 ): Promise<User> {
     const response: AxiosResponse<User> = await api.post('/auth/signup', data);
+    console.log('response',response)
     if (response.status === 201 || response.status === 200) return response.data;
     else throw new Error('Internal Server Error');
 };
