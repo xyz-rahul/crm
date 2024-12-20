@@ -17,7 +17,7 @@ declare module 'express-session' {
     }
 }
 
-const SESSION_SECRET = process.env.SESSION_SECRET;
+const SESSION_SECRET = process.env.SESSION_SECRET || 'secret'
 if (!SESSION_SECRET) throw new Error('SESSION_SECRET not provided');
 
 export default function createServer(): express.Express {

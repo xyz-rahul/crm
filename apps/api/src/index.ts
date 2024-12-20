@@ -3,7 +3,7 @@ import createServer from './startup/server';
 import mongoConnection from './startup/db';
 import 'dotenv/config'
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 80;
 if(!PORT) throw new Error("PORT not provided")
 const server = createServer();
 
