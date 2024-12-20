@@ -36,7 +36,16 @@ export const UserController = {
             { $unwind: "$pageInfo" }
         ]);
 
+        console.log('get all user',data)
         if (data) res.json(data);
+        else if (!data) {
+            res.json({
+                users: [],
+                pageInfo: {
+                    totalCount: 0
+                }
+            })
+        }
         else throw new Error(err)
 
     },

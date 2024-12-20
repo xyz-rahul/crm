@@ -38,6 +38,7 @@ export const Home = () => {
         },
         queryKey: [filter],
     })
+    console.log('lead err',leadSummaryQuery.error)
     return (
         <div className="p-4">
             <SearchBar onChange={setFilter} data={searchQuery.data} />

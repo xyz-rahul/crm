@@ -4,34 +4,30 @@ import bcrypt from 'bcrypt';
 
 export const AuthController = {
     async signUpAsManager(req: Request, res: Response) {
-        try{
 
         const { name, email, password } = req.body;
-        console.log(name,email,password)
         if (!name || !email || !password) {
             res.status(400).json({ message: 'Name, email, and password are required.' });
         }
 
         const user = await User.findOne({ "email": email })
         if (user) res.status(400).json({ message: "user with name already exists" });
-        console.log("user already why ??")
 
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        console.log("user xxxx")
         const managerUser = new User({
             name,
             email,
             password: hashedPassword,
         });
-        console.log("manager User",managerUser)
 
         const savedUser = await managerUser.save();
-        console.log("saved User",savedUser)
-        res.status(201).json(savedUser);
-        }catch(error){
-            console.log('crate errr',error)
+
+        req.session.user = {
+            email: savedUser.email,
+            role: savedUser.role
         }
+        res.status(201).json(savedUser);
     },
 
     async login(req: Request, res: Response) {

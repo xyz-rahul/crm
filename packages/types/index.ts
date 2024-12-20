@@ -13,7 +13,7 @@ export interface UserResponse extends User {}
 export type UserAllResponse = {
     users: User[],
     pageInfo: {
-        totalCount: string
+        totalCount: number
     }
 }
 

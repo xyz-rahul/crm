@@ -36,7 +36,9 @@ export default function Users() {
                         </table>
 
                         <div className="fixed bottom-0 w-full flex justify-center p-4">
-                            <PaginationNav page={page} totalPages={Math.ceil(Number(data.pageInfo.totalCount) / limit)} setSearchParams={setSearchParams} />
+                            {data.pageInfo.totalCount > 0 &&
+                                <PaginationNav page={page} totalPages={Math.ceil(Number(data.pageInfo.totalCount) / limit)} setSearchParams={setSearchParams} />
+                            }
                         </div>
                     </div>
                 </>

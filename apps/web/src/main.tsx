@@ -30,6 +30,7 @@ const queryClient = new QueryClient({
                         err.response.status === 403
                     ) {
                         useAuthStore.logout();
+                        console.log('log out called')
                     }
                 }
 
