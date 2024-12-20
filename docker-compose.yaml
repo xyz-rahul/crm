@@ -3,10 +3,9 @@ services:
     image: mongo:6.0
     container_name: mongodb
     volumes:
-      - mongo-data:/data/db
+      - ./mongo-data:/data/db # Host volume mounted to MongoDB container
     networks:
       - app_network
-
 
   api:
     container_name: api
@@ -22,6 +21,8 @@ services:
       - mongodb
     networks:
       - app_network
+    ports:
+      - 3001:3001
 
   web:
     container_name: web
@@ -33,8 +34,7 @@ services:
     restart: always
     networks:
       - app_network
-      
-      
+
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -51,8 +51,9 @@ services:
     networks:
       - app_network
 
-volumes:
-  mongo-data:
+# volumes:
+  # No named volume is required for MongoDB since we're using a host volume
+  # mongo-data:
 
 networks:
   app_network:
