@@ -2,7 +2,7 @@ services:
   mongodb:
     image: mongo:6.0
     container_name: mongodb
-    restart: unless-stopped
+    restart: always
     ports:
       - 27017:27017
     volumes:
@@ -37,6 +37,9 @@ services:
     restart: always
     ports:
       - 3000:3000
+    depends_on:
+      - api
+      - mongodb
     # networks:
     #   - app_network
 
@@ -53,6 +56,7 @@ services:
     depends_on:
       - web
       - api
+      - mongodb
   #   networks:
   #     - app_network
 
