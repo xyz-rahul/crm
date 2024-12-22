@@ -24,7 +24,7 @@ const items = [
 export default function AppSidebar() {
     const navigate = useNavigate();
     return (
-        <div className="px-3 py-4  bg-gray-50 dark:bg-gray-800 w-[250px] h-screen transition-transform -translate-x-full sm:translate-x-0">
+        <div className="px-3 py-4  bg-gray-50 dark:bg-gray-800 w-[250px] h-screen">
             <ul className="space-y-2 font-medium">
                 {items.map((item, index) => (
                     <li key={index}>

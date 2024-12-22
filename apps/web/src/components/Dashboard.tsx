@@ -38,7 +38,7 @@ export const Dashboard = () => {
 
     return (
         <>
-            <div className="flex">
+            <div className="flex min-w-[1024px]">
                 <AppSidebar />
                 <div className='w-full'>
                     <Outlet />
