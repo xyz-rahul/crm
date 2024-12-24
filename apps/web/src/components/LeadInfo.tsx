@@ -1,4 +1,4 @@
-import { getLeadById, updateLeadById } from '@myorg/api-client';
+import { getLeadById } from '@myorg/api-client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react'
 import { Params, useParams } from 'react-router'
@@ -11,35 +11,22 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Loader2Icon } from 'lucide-react';
+import { EditIcon, SaveIcon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Label } from './ui/label';
-import EditableField from './EditableField';
+import { Input } from './ui/input';
+import { api } from '@/lib/utils';
 
 interface ParamTypes extends Params {
     id: string
 }
 export default function LeadInfo() {
-    const queryClient = useQueryClient();
-
     const { id } = useParams<ParamTypes>();
     const { data } = useQuery({
         queryFn: () => { if (id) return getLeadById(id) },
         queryKey: ['lead', { id }],
     });
-    const [isInputActive, setIsInputActive] = useState<{ [key: string]: boolean | undefined }>({ phone: false });
-    const [inputField, setInputField] = useState<{ [key: string]: string | undefined }>({}); // State for the editable data
-    const updateLeadInfoMutation = useMutation({
-        mutationFn: async () => {
-            console.log('aaaa', id, inputField)
-            if (id) updateLeadById(id, inputField)
-            queryClient.invalidateQueries(['lead'])
-            setIsInputActive({})
-            console.log('bbbb')
-        }
-    })
 
-
+    if (!id) return null
     return (
         <div className="max-w-3xl mx-auto bg-white shadow-md rounded-lg p-6">
             <header className="mb-6">
@@ -53,56 +40,10 @@ export default function LeadInfo() {
                     <div className="text-gray-600">
                         <span className="font-semibold">ID:</span>{data?._id}
                     </div>
-                    <div className="text-gray-600">
-                        <EditableField
-                            keyField="name"
-                            inputField={inputField}
-                            setInputField={setInputField}
-                            isInputActive={isInputActive}
-                            setIsInputActive={setIsInputActive}
-                            value={data?.name}
-                        >
-                            <Label htmlFor="name" className="text-lg">Name:</Label>
-                        </EditableField>
-                        <EditableField
-                            keyField="email"
-                            inputField={inputField}
-                            setInputField={setInputField}
-                            isInputActive={isInputActive}
-                            setIsInputActive={setIsInputActive}
-                            value={data?.email}
-                        >
-                            <Label htmlFor="email" className="text-lg">Email:</Label>
-                        </EditableField>
-                        <EditableField
-                            keyField="phone"
-                            inputField={inputField}
-                            setInputField={setInputField}
-                            isInputActive={isInputActive}
-                            setIsInputActive={setIsInputActive}
-                            value={data?.phone}
-                        >
-                            <Label htmlFor="phone" className="text-lg">Phone:</Label>
-                        </EditableField>
-                    </div>
-                    <p className="text-gray-600 flex gap-2 items-center">
-                        <span className="font-semibold">Status:</span>
-                        <Select onValueChange={(e) => console.log(e)} defaultValue={data?.status}>
-                            <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Set Status" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Select Status</SelectLabel>
-                                    <SelectItem value="new">New</SelectItem>
-                                    <SelectItem value="archived">Archived</SelectItem>
-                                    <SelectItem value="contacted">Contacted</SelectItem>
-                                    <SelectItem value="qualified">Qualified</SelectItem>
-                                    <SelectItem value="converted">Converted</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    </p>
+                    <EditableInputField id={id} title="Name:" property="name" value={data?.name} />
+                    <EditableInputField id={id} title="Email:" property="email" value={data?.email} />
+                    <EditableInputField id={id} title="Phone:" property="phone" value={data?.phone} />
+                    <StatusDropDown id={id} title="Status:" property="status" value={data?.status} />
                 </div>
             </section >
             <hr className="my-6 border-gray-300" />
@@ -134,24 +75,116 @@ export default function LeadInfo() {
                     </p>
                 </div>
             </section>
-
-            <Button
-                onClick={() => {
-                    updateLeadInfoMutation.mutate()
-                }}
-                disabled={updateLeadInfoMutation.isLoading}
-                className="my-4"
-            >
-                {updateLeadInfoMutation.isLoading ?
-                    <>
-                        <Loader2Icon className="animate-spin" />
-                        Please wait
-                    </>
-                    :
-                    <> Update </>
-                }
-            </Button>
         </div >
     )
 }
 
+function EditableInputField({ id, title, property, value }: { id: string, title: string, property: string, value: string | undefined }) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [fieldValue, setFieldValue] = useState("");
+    const queryClient = useQueryClient();
+    const updateLeadInfoMutation = useMutation({
+        mutationFn: async () => {
+            await api.put(`/lead/${id}`, { [property]: fieldValue })
+            queryClient.invalidateQueries(['lead'])
+        },
+        onSuccess: () => {
+            setIsEditing(false)
+        }
+    })
+
+    return (
+        <div className="flex justify-between items-center">
+            <div>
+                <span className="font-semibold pr-2">{title}</span>
+                {!isEditing && value}
+            </div>
+
+            {isEditing ? (
+                <>
+                    <Input
+                        onChange={(e) => setFieldValue(e.target.value)}
+                        defaultValue={value}
+                    />
+                    <Button variant="outline" onClick={() => setIsEditing(false)}>
+                        <XIcon />
+                    </Button>
+                    <Button variant="outline" onClick={() => updateLeadInfoMutation.mutate()}>
+                        <SaveIcon />
+                    </Button>
+                </>
+            ) : (
+                <>
+                    <div>
+                        <Button variant="outline" onClick={() => setIsEditing(true)}>
+                            <EditIcon />
+                        </Button>
+                    </div>
+                </>
+            )
+            }
+        </div >
+    );
+}
+
+
+function StatusDropDown({ id, title, property, value }: { id: string, title: string, property: string, value: string | undefined }) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [fieldValue, setFieldValue] = useState("");
+    const queryClient = useQueryClient();
+    const updateLeadInfoMutation = useMutation({
+        mutationFn: async () => {
+            await api.put(`/lead/${id}`, { [property]: fieldValue })
+            queryClient.invalidateQueries(['lead'])
+        },
+        onSuccess: () => {
+            setIsEditing(false)
+        }
+    })
+
+    return (
+        <div className="flex justify-between items-center">
+            <div className="flex items-center">
+                <span className="font-semibold pr-2">{title}</span>
+                {!isEditing && value}
+                {isEditing &&
+                    <Select
+                        onValueChange={(e) => setFieldValue(e)}
+                        defaultValue={value}>
+                        <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Set Status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectGroup>
+                                <SelectLabel>Select Status</SelectLabel>
+                                <SelectItem value="new">New</SelectItem>
+                                <SelectItem value="archived">Archived</SelectItem>
+                                <SelectItem value="contacted">Contacted</SelectItem>
+                                <SelectItem value="qualified">Qualified</SelectItem>
+                                <SelectItem value="converted">Converted</SelectItem>
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                }
+            </div>
+            {isEditing &&
+                <div>
+
+                    <Button variant="outline" onClick={() => setIsEditing(false)}>
+                        <XIcon />
+                    </Button>
+                    <Button variant="outline" onClick={() => updateLeadInfoMutation.mutate()}>
+                        <SaveIcon />
+                    </Button>
+                </div>
+            }
+            {!isEditing &&
+                <div>
+                    <Button variant="outline" onClick={() => setIsEditing(true)}>
+                        <EditIcon />
+                    </Button>
+                </div>
+            }
+        </div >
+    );
+}

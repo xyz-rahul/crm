@@ -79,6 +79,7 @@ export default function Leads({ data }: { data: LeadsResponse }) {
                         <th scope="col" className="px-6 py-3">Phone</th>
                         <th scope="col" className="px-6 py-3">Status</th>
                         <th scope="col" className="px-6 py-3">ManageBy</th>
+                        <th scope="col" className="px-6 py-3"></th>
                     </tr>
                 </thead>
                 <LeadsTable data={data} />
