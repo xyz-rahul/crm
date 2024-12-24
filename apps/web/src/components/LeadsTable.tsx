@@ -15,7 +15,7 @@ export default function LeadsTable({ data: leadResponse }: { data: LeadsResponse
         <tbody>
             {leadResponse?.leads?.length > 0 ? (
                 leadResponse.leads.map((lead) => (
-                    <LeadRow lead={lead} />
+                    <LeadRow key={lead._id} lead={lead} />
                 ))
             ) : (
                 <tr>

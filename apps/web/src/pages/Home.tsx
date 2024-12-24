@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import { Button } from "@/components/ui/button"
 import { PlusIcon } from 'lucide-react'
-import { Loader } from './ui/custom/Loader'
+import { Loader } from '@/components/ui/custom/Loader'
 import {
     Card,
     CardContent,
@@ -13,11 +13,10 @@ import {
 } from "@/components/ui/card"
 import { useQuery } from '@tanstack/react-query'
 import { getAllLeads, getLeadReport, getSearchResult } from '@myorg/api-client'
-import Error from './ui/custom/Error'
+import Error from '@/components/ui/custom/Error'
 import { LeadsResponse } from '@myorg/types'
-import clsx from 'clsx'
-import SearchBar from './SearchBar'
-import LeadsTable from './LeadsTable'
+import SearchBar from '@/components/SearchBar'
+import LeadsTable from '@/components/LeadsTable'
 
 
 export const Home = () => {

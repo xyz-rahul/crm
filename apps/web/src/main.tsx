@@ -3,17 +3,17 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { BrowserRouter, Routes, Route } from "react-router";
 import { Dashboard } from '@/components/Dashboard.tsx';
-import { Home } from '@/components/Home.tsx';
-import Login from '@/components/Login.tsx';
-import SignUp from '@/components/SignUp.tsx';
-import Leads from '@/components/Leads.tsx';
+import { Home } from '@/pages/Home.tsx';
+import Login from '@/pages/Login.tsx';
+import SignUp from '@/pages/SignUp.tsx';
+import Leads from '@/pages/Leads.tsx';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
-import LeadInfo from '@/components/LeadInfo.tsx';
-import Users from '@/components/Users.tsx';
-import UserInfo from './components/UserInfo.tsx';
+import LeadInfo from '@/pages/LeadInfo.tsx';
+import Users from '@/pages/Users.tsx';
+import UserInfo from '@/pages/UserInfo.tsx';
 import AddLead from './components/AddLead.tsx';
 import { useAuthStore } from './lib/authStore.ts';
-import NotFound from './components/NotFound.tsx';
+import NotFound from '@/pages/NotFound.tsx';
 
 const queryClient = new QueryClient({
     defaultOptions: {

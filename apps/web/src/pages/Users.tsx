@@ -1,10 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getAllUsers } from '@myorg/api-client';
 import { Loader } from '@/components/ui/custom/Loader';
-import Error from './ui/custom/Error';
+import Error from '@/components/ui/custom/Error';
 import { UserAllResponse } from '@myorg/types';
 import { Link, useSearchParams } from 'react-router';
-import PaginationNav from './PaginationNav';
+import PaginationNav from '@/components/PaginationNav';
 
 export default function Users() {
     const [searchParams, setSearchParams] = useSearchParams({ page: "1", limit: "10" });

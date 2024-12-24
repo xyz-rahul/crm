@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { getAllLeads } from '@myorg/api-client';
-import { Loader } from './ui/custom/Loader';
-import Error from './ui/custom/Error';
+import { Loader } from '@/components/ui/custom/Loader';
+import Error from '@/components/ui/custom/Error';
 import { useSearchParams } from 'react-router';
-import PaginationNav from './PaginationNav';
-import LeadsTable from './LeadsTable';
+import PaginationNav from '@/components/PaginationNav';
+import LeadsTable from '@/components/LeadsTable';
 
 export default function Leads() {
     const [searchParams, setSearchParams] = useSearchParams({ page: "1", limit: "10" });
