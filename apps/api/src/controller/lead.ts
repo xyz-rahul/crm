@@ -94,13 +94,14 @@ export const LeadController = {
     },
 
     // Delete a lead
-    deleteLead(req: Request, res: Response) {
-        Lead.findByIdAndDelete(req.params.id)
-            .then((lead) => {
-                if (!lead) return res.status(404).json({ error: 'Lead not found' });
-                res.status(200).json({ message: 'Lead deleted successfully' });
-            })
-            .catch((error) => res.status(500).json({ error: error.message }));
+    async deleteLead(req: Request, res: Response) {
+        console.log(req.params.id)
+        const lead =  await Lead.findByIdAndDelete(req.params.id)
+        if(!lead) {
+            res.status(404).json({ error: 'Lead not found' });
+        }else {
+            res.status(200).json({ message: 'Lead deleted successfully' });
+        }
     },
     async getReport(req: Request, res: Response) {
 
