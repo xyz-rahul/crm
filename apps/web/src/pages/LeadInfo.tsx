@@ -15,6 +15,7 @@ import { EditIcon, SaveIcon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/utils';
+import clsx from 'clsx';
 
 interface ParamTypes extends Params {
     id: string
@@ -146,7 +147,22 @@ function StatusDropDown({ id, title, property, value }: { id: string, title: str
         <div className="flex justify-between items-center">
             <div className="flex items-center">
                 <span className="font-semibold pr-2">{title}</span>
-                {!isEditing && value}
+
+                {!isEditing &&
+
+                    <span
+                        className={clsx(
+                            "py-1 px-4 rounded-2xl text-white font-semibold",
+                            value === "new" && "bg-blue-500",
+                            value === "archived" && "bg-gray-400",
+                            value === "contacted" && "bg-yellow-500",
+                            value === "qualified" && "bg-green-500",
+                            value === "converted" && "bg-purple-500",
+                        )}
+                    >
+                        {value}
+                    </span>
+                }
                 {isEditing &&
                     <Select
                         onValueChange={(e) => setFieldValue(e)}
