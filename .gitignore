@@ -65,3 +65,4 @@ data/
 jest-coverage/
 
 .turbo
+mongo-data
