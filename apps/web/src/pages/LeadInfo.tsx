@@ -1,7 +1,7 @@
 import { getLeadById } from '@myorg/api-client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react'
-import { Params, useParams } from 'react-router'
+import { Params, useNavigate, useParams } from 'react-router'
 import {
     Select,
     SelectContent,
@@ -11,20 +11,36 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { EditIcon, SaveIcon, XIcon } from 'lucide-react';
+import { EditIcon, Loader2Icon, SaveIcon, Trash2Icon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/lib/utils';
 import clsx from 'clsx';
+
+
+async function deleteLead(id: string) {
+    await api.delete(`/lead/${id}`);
+}
 
 interface ParamTypes extends Params {
     id: string
 }
 export default function LeadInfo() {
     const { id } = useParams<ParamTypes>();
+    const queryClient = useQueryClient();
     const { data } = useQuery({
         queryFn: () => { if (id) return getLeadById(id) },
         queryKey: ['lead', { id }],
+    });
+    const navigate = useNavigate();
+
+
+    const deleteMutation = useMutation<unknown, unknown, string>({
+        mutationFn: deleteLead,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["lead"]);
+            navigate('/leads')
+        },
     });
 
     if (!id) return null
@@ -76,6 +92,18 @@ export default function LeadInfo() {
                     </p>
                 </div>
             </section>
+
+            <div className="px-6 py-4 font-semibold text-gray-900 dark:text-white flex justify-end">
+                {deleteMutation.isLoading ?
+                    <>
+                        <Loader2Icon className="animate-spin" />
+                    </> :
+                    <Button onClick={() => deleteMutation.mutate(id)} variant="destructive" className="hover:border-red-600">
+                        Delete Lead
+                        <Trash2Icon />
+                    </Button>
+                }
+            </div>
         </div >
     )
 }
