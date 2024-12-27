@@ -3,11 +3,6 @@
 #### Monorepo using  TurboRepo 
 #### Dockerized
 
-
-## Live Demo
-The application is live and can be accessed at:
-[http://34.131.191.155/](http://34.131.191.155/)
-
 ---
 
 ## Features
